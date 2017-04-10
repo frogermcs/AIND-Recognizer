@@ -38,6 +38,28 @@ def show_errors(guesses: list, test_set: SinglesData):
         print('{:5}: {:60}  {}'.format(video_num, ' '.join(recognized_sentence), ' '.join(correct_sentence)))
 
 
+def show_errors_simple(guesses: list, test_set: SinglesData):
+    """ Print simplified WER 
+
+    :param guesses: list of test item answers, ordered
+    :param test_set: SinglesData object
+    :return:
+        nothing returned, prints error report
+
+    WER = (S+I+D)/N  but we have no insertions or deletions for isolated words so WER = S/N
+    """
+    S = 0
+    N = len(test_set.wordlist)
+    num_test_words = len(test_set.wordlist)
+    if len(guesses) != num_test_words:
+        print("Size of guesses must equal number of test words ({})!".format(num_test_words))
+    for word_id in range(num_test_words):
+        if guesses[word_id] != test_set.wordlist[word_id]:
+            S += 1
+
+    print("WER = {}\t{}/{}".format(float(S) / float(N), N - S, N))
+
+
 def getKey(item):
     return item[1]
 
